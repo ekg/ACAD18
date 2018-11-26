@@ -76,6 +76,11 @@ Another tool that comes with the graphviz package is *Neato*. It creates force-d
 
 For these small graphs, the difference it not that big, but for more involved cases, these layouts can be much easier to read.
 
+A better solution for larger graphs is [Bandage](http://rrwick.github.io/Bandage/), which is designed for visualizing assembly graphs. It can't display path information, but it can scale to multi-megabase graphs with ease. Adjust the `--nodewidth` parameter if your display is blank.
+
+        vg view tiny.ref.vg >x.gfa
+        Bandage image x.gfa x.gfa.png --nodewidth 100
+
 ### Mapping reads to a graph
 Ok, let's step up to a slightly bigger example.
 
