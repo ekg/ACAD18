@@ -64,22 +64,30 @@ Visualize the outcome.
 
 Ok, that's nice, but you might wonder which sequence of nodes actually corresponds to the sequence (`tiny.fa`) you started from? To keep track of that, vg adds a **path** to the graph. Let's add this path to the visualization.
 
-	vg view -dp tiny.ref.vg | dot -Tpdf -o tiny.pdf
+	vg view -dp tiny.vg | dot -Tpdf -o tiny.pdf
 
 You find the output too crowded? Option `-S` removes the sequence labels and only plots node IDs.
 
-	vg view -dpS tiny.ref.vg | dot -Tpdf -o tiny.pdf
+	vg view -dpS tiny.vg | dot -Tpdf -o tiny.pdf
 
 Another tool that comes with the graphviz package is *Neato*. It creates force-directed layouts of a graph.
 
-	vg view -dpS tiny.ref.vg | neato -Tpdf -o tiny.pdf
+	vg view -dpS tiny.vg | neato -Tpdf -o tiny.pdf
 
 For these small graphs, the difference it not that big, but for more involved cases, these layouts can be much easier to read.
 
 A better solution for larger graphs is [Bandage](http://rrwick.github.io/Bandage/), which is designed for visualizing assembly graphs. It can't display path information, but it can scale to multi-megabase graphs with ease. Adjust the `--nodewidth` parameter if your display is blank.
 
-        vg view tiny.ref.vg >x.gfa
+        vg view tiny.vg >x.gfa
         Bandage image x.gfa x.gfa.png --nodewidth 100
+
+You can also apply `vg viz` to obtain a special kind of linear layout that scales well without losing path information.
+It requires the `xg` index, which we'll build first.
+
+        vg index -x tiny.xg tiny.vg
+        vg viz -x tiny.xg -o tiny.svg
+
+If the graph is very big, you'll need to view tiny.svg in chrome or chromium web browser.
 
 ### Mapping reads to a graph
 Ok, let's step up to a slightly bigger example.
@@ -199,3 +207,38 @@ Let's dig into some of the more-highly differentiated reads to understand why vg
 - `vg mod -g ID -x N GRAPH.vg` : extract the subgraph that is within `N` nodes from node `ID`
 - `vg mod -P -i ALN.gam GRAPH.vg` : add the paths from the alignment into the graph (similar to the reference path in the exercise)
 
+### Bonus: building a variation graph from whole genomes
+
+The directory `~/workshop/2_Tue_Garrison/yeast` contains _S. cerevisiae_ data from [Yue et. al 2017](https://doi.org/10.1038/ng.3847).
+This paper produced whole genome assemblies for a number of yeast strains based on PacBio long read sequencing, and then used these assemblies to examine evolutionary adaptation in wild and domesticated yeasts.
+Here, your goal is to use the high-performance long read and whole genome aligner [minimap2](https://github.com/lh3/minimap2), the alignment filtering system [fpa](https://github.com/natir/fpa), and the variation graph inducer [seqwish](https://github.com/ekg/seqwish) to build a graph from these whole genome assemblies.
+You can then use `Bandage` to visualize the output.
+By indexing the graph as before, we can then test the relative performance of alignment with the Illumina data from the S288C and SK1 strains.
+
+To build the graph, we first apply [minimap2 for whole genome alignment as directed by its author](https://github.com/lh3/minimap2/issues/251):
+
+    cd genomes
+    pan-minimap2 S288c.genome.fa DBVPG6765.genome.fa UWOPS034614.genome.fa Y12.genome.fa YPS128.genome.fa SK1.genome.fa DBVPG6044.genome.fa >cerevisae.paf
+
+We filter the alignments to remove short alignments that are typical of repeats, and which can cause collapse of the induced graph.
+
+    cat cerevisiae.paf | pv -l -c  | fpa -l 10000 | pv -l -c >cerevisiae.l10k.paf
+
+Now we can run seqwish to induce the variation graph. Note that `cerevisiae.fa` contains the above genomes concatenated together.
+
+    seqwish -s cerevisiae.fa -a cerevisiae.l10k.paf -b cerevisiae.l10k.paf -t 4 >cerevisiae.l10k.gfa
+
+Bandage will require a lot of memory, but can provide an interesting view of the result:
+
+    cat cerevisiae.l10k.gfa | grep -v ^P >cichlid_pan.l10k.no_paths.gfa
+    Bandage image cichlid_pan.l10k.no_paths.gfa cichlid_pan.l10k.gfa.png --nodewidth 1000 --width 4000 
+
+Now we should convert the graph to .vg format and [index it as described in the vg wiki](https://github.com/vgteam/vg/wiki/Index-Construction).
+It is very likely that we will require some form of pruning to reduce the graph complexity, so follow suggestions there to do so.
+
+Finally, to evaluate the benefit of aligning against this graph, we should build a linear graph from the S288C.genome.fa file.
+Align the SK1 read set to both graphs and measure the relative alignment identity.
+Does the aggregate alignment quality improve when aligning against the pangenome?
+Do the reads have higher identity when aligned to the pangenome versus the linear reference?
+Is the effect the same for S288C?
+What happens when we remove SK1 from the input set and repeat the process?
