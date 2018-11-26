@@ -1,5 +1,7 @@
 # ACAD 2018 Advanced Bioinformatics Workshop Day 2
 
+## Learning `vg` on toy examples
+
 ### Learning objectives
 
 In this exercise you learn how to
