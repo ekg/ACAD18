@@ -21,7 +21,13 @@ Now create a directory to work on for this tutorial:
 
 	mkdir exercise1
 	cd exercise1
-	ln -s ../vg/test/tiny
+        cp vg/test exercise1
+
+In the ACAD18 course, we already have the test directory prepared for you in the system image.
+
+        cd /home/ubuntu/workshop/2_Tue_Garrison/toy
+
+If you run into trouble, you can clone and copy out the test directory fom the vg repo.
 
 ### Constructing and viewing your first graphs
 
@@ -171,8 +177,9 @@ How do these files seem to scale with the minimum cutoff?
 
 We can also download some real data mapping to this region to see if the different graphs provide varying levels of performance.
 
-    # note: if you are taking this course at the Gulbenkian Institute of Science, these files have been added to your computers in the ~/data/toy directory
+    # note: if you are taking this course, this data is available in /home/ubuntu/workshop/2_Tue_Garrison/human
     samtools view -b ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/NA12878/NIST_NA12878_HG001_HiSeq_300x/RMNISTHS_30xdownsample.bam 20:1000000-2000000 >NA12878.20_1M-2M.30x.bam
+    # alternatively:
     wget http://hypervolu.me/~erik/tmp/HG002-NA24385-20_1M-2M-50x.bam
 
 The first is a sample that was used in the preparation of the 1000 Genomes results, and so we expect to find it in the graph. The second wasn't used in the preparation of the variant set, but we do expect to find almost all of its variants in the 1000G set. Why is this true?
@@ -241,4 +248,4 @@ Align the SK1 read set to both graphs and measure the relative alignment identit
 Does the aggregate alignment quality improve when aligning against the pangenome?
 Do the reads have higher identity when aligned to the pangenome versus the linear reference?
 Is the effect the same for S288C?
-What happens when we remove SK1 from the input set and repeat the process?
+What happens when we remove SK1 or other genomes from the input set and repeat the process?
