@@ -245,7 +245,7 @@ To build the graph, we first apply [minimap2 for whole genome alignment as direc
     cd genomes
     pan-minimap2 S288c.genome.fa DBVPG6765.genome.fa UWOPS034614.genome.fa Y12.genome.fa YPS128.genome.fa SK1.genome.fa DBVPG6044.genome.fa >cerevisiae.paf
 
-We filter the alignments to remove short alignments that are typical of repeats, and which can cause collapse of the induced graph. (First install fpa via `cargo install fpa_lr --force`.)
+We filter the alignments to remove short alignments that are typical of repeats, and which can cause collapse of the induced graph. (First install fpa via `cargo install fpa_lr`.)
 
     cat cerevisiae.paf | pv -l -c  | ~/.cargo/bin/fpa -l 10000 | pv -l -c >cerevisiae.l10k.paf
 
