@@ -200,10 +200,13 @@ The first is a sample that was used in the preparation of the 1000 Genomes resul
 
 We can run a single-ended alignment test to compare with bwa mem:
 
-    samtools fastq -1 HG002-NA24385-20_1M-2M-50x_1.fq.gz -2 HG002-NA24385-20_1M-2M-50x_2.fq.gz HG002-NA24385-20_1M-2M-50x.bam
+    samtools fastq -1 HG002-NA24385-20_1M-2M-50x_1.fq.gz -2 HG002-NA24385-20_1M-2M-50x_2.fq.gz ../human/HG002-NA24385-20_1M-2M-50x.bam
     bwa index 1mb1kgp/z.fa
     bwa mem 1mb1kgp/z.fa HG002-NA24385-20_1M-2M-50x_1.fq.gz | sambamba view -S -f json /dev/stdin | jq -cr '[.qname, .tags.AS] | @tsv' >bwa_mem.scores.tsv
-    vg map --drop-full-l-bonus -d z.AF0.01 -f HG002-NA24385-20_1M-2M-50x_1.fq.gz -j | pv -l | jq -cr '[.name, .score] | @tsv' >vg_map.AF0.01.scores.tsv
+    bcftools filter -i 'AF > 0.01' 1mb1kgp/z.vcf.gz >z.AF0.01.vcf
+    vg construct -r 1mb1kgp/z.fa -v z.AF0.01.vcf -m 32 >z.AF0.01.vg
+    vg index -x z.AF0.01.xg -g z.AF0.01.gcsa z.AF0.01.vg
+    vg map --drop-full-l-bonus -d z.AF0.01 -f ../HG002-NA24385-20_1M-2M-50x_1.fq.gz -j | pv -l | jq -cr '[.name, .score] | @tsv' >vg_map.AF0.01.scores.tsv
 
 Then we can compare the results using sort and join:
 
