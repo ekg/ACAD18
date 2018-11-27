@@ -178,7 +178,7 @@ With this input you should be able to run the whole pipeline:
 - Construct the graphs with the filtered VCF
 - Index the graphs for mapping
 - Map the simulated reads to the graphs
-- Check the identity of the read mappings
+- Check the identity of the read mappings (use `jq .identity` rather than `jq .correct`)
 
 Try doing this on graphs with a range of minimum allele frequencies (e.g. 0.5, 0.1, 0.01, etc.). How do the properties of the mappings change with different minimum frequencies? Let's also look at the sizes of the graphs and indexes.
 
