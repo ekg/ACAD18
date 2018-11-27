@@ -191,17 +191,18 @@ How do these files seem to scale with the minimum cutoff? Note that the identity
 
 We can also download some real data mapping to this region to see if the different graphs provide varying levels of performance.
 
-    # note: if you are taking this course, this data is available in /home/ubuntu/workshop/2_Tue_Garrison/human
     samtools view -b ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/NA12878/NIST_NA12878_HG001_HiSeq_300x/RMNISTHS_30xdownsample.bam 20:1000000-2000000 >NA12878.20_1M-2M.30x.bam
     # alternatively:
+    # note: if you are taking this course, this data is available in /home/ubuntu/workshop/2_Tue_Garrison/human
     wget http://hypervolu.me/~erik/tmp/HG002-NA24385-20_1M-2M-50x.bam
 
 The first is a sample that was used in the preparation of the 1000 Genomes results, and so we expect to find it in the graph. The second wasn't used in the preparation of the variant set, but we do expect to find almost all of its variants in the 1000G set. Why is this true?
 
 We can run a single-ended alignment test to compare with bwa mem:
 
-    samtools fastq -1 HG002-NA24385-20_1M-2M-50x_1.fq.gz -2 HG002-NA24385-20_1M-2M-50x_2.fq.gz data/HG002-NA24385-20_1M-2M-50x.bam
-    bwa mem z.fa HG002-NA24385-20_1M-2M-50x_1.fq.gz | sambamba view -S -f json /dev/stdin | jq -cr '[.qname, .tags.AS] | @tsv' >bwa_mem.scores.tsv
+    samtools fastq -1 HG002-NA24385-20_1M-2M-50x_1.fq.gz -2 HG002-NA24385-20_1M-2M-50x_2.fq.gz HG002-NA24385-20_1M-2M-50x.bam
+    bwa index 1mb1kgp/z.fa
+    bwa mem 1mb1kgp/z.fa HG002-NA24385-20_1M-2M-50x_1.fq.gz | sambamba view -S -f json /dev/stdin | jq -cr '[.qname, .tags.AS] | @tsv' >bwa_mem.scores.tsv
     vg map --drop-full-l-bonus -d z.AF0.01 -f HG002-NA24385-20_1M-2M-50x_1.fq.gz -j | pv -l | jq -cr '[.name, .score] | @tsv' >vg_map.AF0.01.scores.tsv
 
 Then we can compare the results using sort and join:
