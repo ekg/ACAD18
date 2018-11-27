@@ -247,7 +247,7 @@ To build the graph, we first apply [minimap2 for whole genome alignment as direc
 
 We filter the alignments to remove short alignments that are typical of repeats, and which can cause collapse of the induced graph. (First install fpa via `cargo install fpa_lr --force`.)
 
-    cat cerevisiae.paf | pv -l -c  | fpa -l 10000 | pv -l -c >cerevisiae.l10k.paf
+    cat cerevisiae.paf | pv -l -c  | ~/home/ubuntu/.cargo/bin/fpa -l 10000 | pv -l -c >cerevisiae.l10k.paf
 
 Now we can run seqwish to induce the variation graph. Note that `cerevisiae.fa` contains the above genomes concatenated together.
 
