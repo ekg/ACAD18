@@ -88,10 +88,10 @@ Another tool that comes with the graphviz package is *Neato*. It creates force-d
 
 For these small graphs, the difference it not that big, but for more involved cases, these layouts can be much easier to read.
 
-A better solution for larger graphs is [Bandage](http://rrwick.github.io/Bandage/), which is designed for visualizing assembly graphs. It can't display path information, but it can scale to multi-megabase graphs with ease. Adjust the `--nodewidth` parameter if your display is blank.
+A better solution for larger graphs is [Bandage](http://rrwick.github.io/Bandage/), which is designed for visualizing assembly graphs. It can't display path information, but it can scale to multi-megabase graphs with ease. Adjust the `--nodewidth` parameter (e.g. `--nodewidth 100`, up to 1000) if you are rendering a large graph and the resulting image appears blank.
 
     vg view tiny.vg >x.gfa
-    Bandage image x.gfa x.gfa.png --nodewidth 100
+    Bandage image x.gfa x.gfa.png
 
 You can also apply `vg viz` to obtain a special kind of linear layout that scales well without losing path information.
 It requires the `xg` index, which we'll build first.
