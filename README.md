@@ -144,6 +144,13 @@ These commands would show us the first alignment in the set:
 
 We see the `Mappings` of the `Alignment` written in blue for exact matches and yellow for mismatches above the nodes that they refer to. Many alignments can be visualized at the same time. A simpler mode of visualization `vg view -dSA` gives us the alignment's mappings to nodes, colored in the range from green to red depending on the quality of the match to the particular node.
 
+To visualize many alignments, we can sort and index our GAM and then pull out the alignments matching a particular subgraph.
+
+    vg gamsort z.gam | vg gamsort -i z.sort.gam.gai - >z.sort.gam
+    vg find -n 1020 -x z.xg -c 10 >z.sub.vg
+    vg find -l z.sort.gam -A z.sub.vg >z.sub.gam
+    vg view -dA z.sub.gam z.sub.vg | dot -Tpdf -o z1020gam.pdf
+
 For evaluation purposes, vg has the capability to compare the newly created read alignments to true paths of each reads used during simulation.
 
     vg map -x z.xg -g z.gcsa -G z.sim --compare -j
