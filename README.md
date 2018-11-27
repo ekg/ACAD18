@@ -243,7 +243,7 @@ By indexing the graph as before, we can then test the relative performance of al
 To build the graph, we first apply [minimap2 for whole genome alignment as directed by its author](https://github.com/lh3/minimap2/issues/251):
 
     cd genomes
-    pan-minimap2 S288c.genome.fa DBVPG6765.genome.fa UWOPS034614.genome.fa Y12.genome.fa YPS128.genome.fa SK1.genome.fa DBVPG6044.genome.fa >cerevisae.paf
+    pan-minimap2 S288c.genome.fa DBVPG6765.genome.fa UWOPS034614.genome.fa Y12.genome.fa YPS128.genome.fa SK1.genome.fa DBVPG6044.genome.fa >cerevisiae.paf
 
 We filter the alignments to remove short alignments that are typical of repeats, and which can cause collapse of the induced graph.
 
