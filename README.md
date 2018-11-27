@@ -104,7 +104,7 @@ If the graph is very big, you'll need to view tiny.svg in chrome or chromium web
 ### Mapping reads to a graph
 Ok, let's step up to a slightly bigger example.
 
-    ln -s ../vg/test/1mb1kgp
+    ls 1mb1kgp
 
 This directory contains 1Mbp of 1000 Genomes data for chr20:1000000-2000000. As for the tiny example, let's' build one linear graph that only contains the reference sequence and one graph that additionally encodes the known sequence variation. The reference sequence is contained in `1mb1kgp/z.fa`, and the variation is contained in `1mb1kgp/z.vcf.gz`. Make a reference-only graph named `ref.vg`, and a graph with variation named `z.vg`. Look at the previous examples to figure out the command.
 
@@ -112,6 +112,7 @@ You might be tempted to visualize these graphs (and of course you are welcome to
 
 In a nutshell, mapping reads to a graph is done in two stages: first, seed hits are identified and then a sequence-to-graph alignment is performed for each individual read. Seed finding hence allows vg to spot candidate regions in the graph to which a given read can map potentially map to. To this end, we need an index. In fact, vg needs two different representations of a graph for read mapping XG (a succinct representation of the graph) and GCSA (a k-mer based index). To create these representations, we use `vg index` as follows.
 
+    vg construct -r 1mb1kg/z.fa -v 1mb1kg/z.vcf.gz -m 32 >z.vg
     vg index -x z.xg z.vg
     vg index -g z.gcsa -k 16 z.vg
 
