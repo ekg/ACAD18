@@ -112,7 +112,7 @@ You might be tempted to visualize these graphs (and of course you are welcome to
 
 In a nutshell, mapping reads to a graph is done in two stages: first, seed hits are identified and then a sequence-to-graph alignment is performed for each individual read. Seed finding hence allows vg to spot candidate regions in the graph to which a given read can map potentially map to. To this end, we need an index. In fact, vg needs two different representations of a graph for read mapping XG (a succinct representation of the graph) and GCSA (a k-mer based index). To create these representations, we use `vg index` as follows.
 
-    vg construct -r 1mb1kg/z.fa -v 1mb1kg/z.vcf.gz -m 32 >z.vg
+    vg construct -r 1mb1kgp/z.fa -v 1mb1kgp/z.vcf.gz -m 32 >z.vg
     vg index -x z.xg z.vg
     vg index -g z.gcsa -k 16 z.vg
 
