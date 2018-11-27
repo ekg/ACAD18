@@ -4,6 +4,7 @@
 
 - [an overview of computational pangenomic approaches](https://gtpb.github.io/CPANG18/assets/day1-intro.pdf)
 - [slides from the public talk on November 26, 2018](https://docs.google.com/presentation/d/1V0fDj8UauhVJg4lqxWrrYYJCsp1jVZB0qVqpQpinGGs/edit?usp=sharing).
+- [data structures and exercise objectives](https://docs.google.com/presentation/d/1gkKGv4H0edw9ZdnoqOgPBVvpNwxj9gbgQoVoOoJMRAM/edit?usp=sharing)
 
 ### Learning objectives
 
